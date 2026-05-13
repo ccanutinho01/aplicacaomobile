@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 
@@ -7,6 +7,16 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Auto eletrica</IonCardTitle>
+            <IonCardSubtitle>Explore</IonCardSubtitle>
+          </IonCardHeader>
+
+          <IonCardContent>
+            Bem vindo a autoeletrica, aqui seu carro fica ligadão
+          </IonCardContent>
+        </IonCard>
         <IonToolbar>
           <IonTitle>Blank</IonTitle>
         </IonToolbar>
@@ -19,9 +29,9 @@ const Home: React.FC = () => {
         </IonHeader>
         <ExploreContainer />
       </IonContent>
-      <ion-button expand="block" color="primary">Salvar</ion-button>  
+      <IonButton expand="block" color="primary">Salvar</IonButton>
     </IonPage>
   );
-};  
+};
 
 export default Home;
