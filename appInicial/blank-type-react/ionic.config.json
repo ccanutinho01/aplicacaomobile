@@ -1,0 +1,7 @@
+{
+  "name": "blank--type=react",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

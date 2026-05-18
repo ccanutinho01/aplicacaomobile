@@ -1,37 +1,32 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Home.css';
+
+import React, { useState } from 'react';
+import { IonButton, IonContent, IonPage } from '@ionic/react';
+import { Tarefa } from '../model/Tarefa';
+import { c } from 'vitest/dist/reporters-5f784f42';
+
+
 
 const Home: React.FC = () => {
+  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+
+  function adicionar(){
+    const novaTarefa = new Tarefa('Estudar', 'POO no ionic');
+
+    setTarefa([...tarefas, nova]);
+  }
+  console.log(tarefas);
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Auto eletrica</IonCardTitle>
-            <IonCardSubtitle>Explore</IonCardSubtitle>
-          </IonCardHeader>
-
-          <IonCardContent>
-            Bem vindo a autoeletrica, aqui seu carro fica ligadão
-          </IonCardContent>
-        </IonCard>
-        <IonToolbar>
-          <IonTitle>Blank</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer />
+      <IonContent>
+        <IonButton onClick={adicionar}>
+          Adicionar Tarefa
+          </IonButton>
       </IonContent>
-      <IonButton expand="block" color="primary">Salvar</IonButton>
     </IonPage>
   );
 };
+
+
 
 export default Home;
