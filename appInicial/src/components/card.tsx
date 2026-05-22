@@ -1,10 +1,17 @@
-import {Component} from '@angular/core';
-import{IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent} from '@ionic/angular/standalone';
+import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/react';
 
-@Component({
-  selector: 'autoeletrica-card',
-  templateUrl: 'autoeletrica/card.html',
-  styleUrl: 'autoeletrica/card.css'
-  imports: [IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent]
-})
-export class AutoeletricaComponent {}
+const Card: React.FC = () => {
+  return (
+    <IonCard>
+      <IonCardHeader>
+        <IonCardTitle>Card Title</IonCardTitle>
+        <IonCardSubtitle>Auto Elétrica</IonCardSubtitle>
+      </IonCardHeader>
+      <IonCardContent>
+        Aqui vai o conteúdo do card. Substitua pelo texto ou componentes desejados.
+      </IonCardContent>
+    </IonCard>
+  );
+};
+
+export default Card;

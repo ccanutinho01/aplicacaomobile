@@ -1,6 +1,7 @@
 export class Produto{
     nome:string;
     preco:number;
+    estoque: number;
 
     constructor(nome:string, preco:number){
         this.nome = nome;
@@ -8,7 +9,7 @@ export class Produto{
         this.estoque = 0;
     }
 
-  adicionarEstoque(quantidade:number){
+  adicionarEstoque(qtd:number){
     this.estoque += qtd;
-    }           
+  }
 }
