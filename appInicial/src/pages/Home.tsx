@@ -1,19 +1,13 @@
 
 import React, { useState } from 'react';
 import { IonButton, IonContent, IonPage, IonInput, IonItem, IonLabel } from '@ionic/react';
-import { Tarefa } from '../model/Tarefa';
 import { Produto } from '../model/Produto';
 
 const Home: React.FC = () => {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+  const [produto, setProduto] = useState<Produto[]>([]);
 
-  function adicionar(){
-    const nova = new Tarefa('Estudar', 'POO no ionic');
-    nova.concluir();
-    setTarefas([...tarefas, nova]);
-  };
-
-  console.log(tarefas);
+  
+  console.log(produto);
   const [estoque, setEstoque] = useState<Produto[]>([]);
   const [prodNome, setProdNome] = useState<string>('');
   const [prodPreco, setProdPreco] = useState<string>('');
@@ -30,7 +24,7 @@ const Home: React.FC = () => {
 
     const novoProduto = new Produto(nome, preco);
     if(qtd > 0) novoProduto.adicionarEstoque(qtd);
-    setEstoque([...estoque, novoProduto]);
+    setProduto([...produto, novoProduto]);
 
     setProdNome('');
     setProdPreco('');
@@ -40,8 +34,8 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
-        <IonButton onClick={adicionar}>
-          Adicionar Tarefa
+        <IonButton onClick={adicionarProduto}>
+          Adicionar Produto
         </IonButton>
         
         <IonItem>
