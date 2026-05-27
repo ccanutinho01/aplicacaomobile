@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { IonButton, IonContent, IonPage, IonInput, IonToolbar, IonTitle, IonHeader } from '@ionic/react';
 import { Produto } from '../model/Produto';
 
+
 const Cadastro: React.FC = () => {
 const [produtos, setProdutos] = useState<Produto[]>([]);
   const nomeRef = useRef<any>(null);
@@ -37,6 +38,7 @@ const [produtos, setProdutos] = useState<Produto[]>([]);
         </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
+          <IonButton routerLink="/home" expand="block">Voltar para Home</IonButton>
         <br />
         <IonInput ref={nomeRef} label="Nome do produto" labelPlacement="floating" />    
         <br />  
