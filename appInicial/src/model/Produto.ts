@@ -1,15 +1,16 @@
-export class Produto{
-    nome:string;
-    preco:number;
-    estoque: number;
+export class Produto {
+  id?: number;
+  nome: string;
+  preco: number;
+  estoque: number;
 
-    constructor(nome:string, preco:number){
-        this.nome = nome;
-        this.preco = preco;
-        this.estoque = 0;
-    }
+  constructor(nome: string, preco: number, estoque = 0) {
+    this.nome = nome;
+    this.preco = preco;
+    this.estoque = estoque;
+  }
 
-  adicionarEstoque(qtd:number){
+  adicionarEstoque(qtd: number) {
     this.estoque += qtd;
   }
 }

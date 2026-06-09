@@ -1,44 +1,65 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
-import { ProdutoService } from '../service/Produtoservice';
+import React, { useRef } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonButton } from '@ionic/react';
+import { useHistory } from 'react-router';
+import { useIonAlert } from '@ionic/react';
+import { ProdutoService } from '../service/ProdutoService';
 
 const Cadastro: React.FC = () => {
-  const [nome, setNome] = useState('');
-  const [preco, setPreco] = useState('');
-  const service = new ProdutoService();
+  const nomeRef = useRef<any>(null);
+  const precoRef = useRef<any>(null);
+  const estoqueRef = useRef<any>(null);
   const history = useHistory();
 
-  async function salvar() {
-    const produto = {
-      nome,
-      preco: Number(preco),
-      estoque: 0
-    };
+  const [presentAlert] = useIonAlert();
+  const service = new ProdutoService();
 
-    await service.adicionar(produto);
-    history.goBack();
+  async function salvar() {
+    const nome = nomeRef.current?.value || "";
+    const preco = parseFloat(precoRef.current?.value || "0");
+    const estoque = parseInt(estoqueRef.current?.value || "0");
+
+    if (nome && preco > 0 && estoque > 0) {
+      await service.adicionar({ nome, preco, estoque });
+      presentAlert({
+        header: 'Sucesso',
+        message: 'Produto cadastrado com sucesso!',
+        buttons: ['OK']
+      });
+
+      if (nomeRef.current) nomeRef.current.value = "";
+      if (precoRef.current) precoRef.current.value = "";
+      if (estoqueRef.current) estoqueRef.current.value = "";
+
+      history.push('/home');
+    } else {
+      presentAlert({
+        header: 'Erro',
+        message: 'Por favor, preencha o nome, preço e estoque corretamente.',
+        buttons: ['OK']
+      });
+    }
+  }
+
+  function navegarParaHome(){
+    history.push('/home');
   }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Cadastro de Produto</IonTitle>
+          <IonTitle>Controle de Estoque</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        <IonItem>
-          <IonLabel position="stacked">Nome</IonLabel>
-          <IonInput value={nome} onIonChange={e => setNome(e.detail.value ?? '')} />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Preço</IonLabel>
-          <IonInput value={preco} onIonChange={e => setPreco(e.detail.value ?? '')} type="number" />
-        </IonItem>
-        <IonButton expand="block" className="ion-margin-top" onClick={salvar}>
-          Salvar
-        </IonButton>
+      <IonContent fullscreen>
+        <IonButton onClick={navegarParaHome}> Voltar para Home</IonButton>
+        <br />
+        <IonInput ref={nomeRef} label="Descrição do Produto" labelPlacement="floating" fill="outline" placeholder="Digite aqui"></IonInput>
+        <br />
+        <IonInput ref={precoRef} label="Preço" labelPlacement="floating" fill="outline" placeholder="Digite aqui"></IonInput>
+        <br />
+        <IonInput ref={estoqueRef} label="Estoque" labelPlacement="floating" fill="outline" placeholder="Digite aqui"></IonInput>
+        <IonButton onClick={salvar}> Cadastrar Produto</IonButton>
       </IonContent>
     </IonPage>
   );
