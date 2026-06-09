@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { IonButton, IonContent, IonLabel, IonList, IonPage, IonItem, IonToast, IonAlert, IonText } from '@ionic/react';
+import { IonButton, IonContent, IonPage, IonList, IonLabel, IonItem, IonIcon } from '@ionic/react';
 import { Produto } from '../model/Produto';
-import { ProdutoService } from '../service/Produtoservice';
+import { ProdutoService } from '../service/ProdutoService';
+import { trashOutline } from 'ionicons/icons';
 
 
 const Home: React.FC = () => {
@@ -32,6 +33,9 @@ const Home: React.FC = () => {
               <IonLabel>
                 {p.nome} - R$ {p.preco}
               </IonLabel>
+              <IonButton onClick={() => excluir(p.id)} color="danger">
+                <IonIcon icon={trashOutline} />
+              </IonButton>
             </IonItem>
           ))}
         </IonList>

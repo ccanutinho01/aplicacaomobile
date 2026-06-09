@@ -2,7 +2,7 @@ import {Produto} from '../model/Produto';
 
 export class ProdutoService {
 
-    baseUrl= "http://localhost:3001";
+    baseUrl= "http://localhost:3000";
 
     async listar(){
         const res = await fetch(`${this.baseUrl}/produtos`);
