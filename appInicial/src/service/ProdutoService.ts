@@ -45,8 +45,31 @@ export class ProdutoService {
       if (!res.ok) {
         throw new Error(`Falha ao remover produto: ${res.status}`);
       }
+      return await res.json();
     } catch (error) {
       console.error('Erro ao remover produto:', error);
+      return null;
+    }
+  }
+
+  async atualizar(id: number, produto: any) {
+    try {
+      const res = await fetch(`${this.baseUrl}/produtos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(produto),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Falha ao atualizar produto: ${res.status}`);
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error('Erro ao atualizar produto:', error);
+      return null;
     }
   }
 }

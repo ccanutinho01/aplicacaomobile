@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -14,7 +14,6 @@ import {
   IonItemSliding,
   IonItemOption,
   IonItemOptions,
-  IonModal,
   useIonAlert,
 } from '@ionic/react';
 import { useHistory } from 'react-router';
@@ -25,40 +24,74 @@ import { Produto } from '../model/Produto';
 const Home: React.FC = () => {
   const history = useHistory();
   const [produtos, setProdutos] = useState<Produto[]>([]);
-  const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [carregando, setCarregando] = useState(false);
+  const [deletando, setDeletando] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
   const [presentAlert] = useIonAlert();
   const service = new ProdutoService();
-  const modal = useRef<HTMLIonModalElement>(null);
 
   useIonViewWillEnter(() => {
     carregarProdutos();
   });
 
   async function carregarProdutos() {
-    const produtosCarregados = await service.listar();
-    setProdutos(produtosCarregados);
-  }
-
-  async function removerProduto() {
-    if (!produtoSelecionado) {
-      return;
+    setCarregando(true);
+    setErro(null);
+    try {
+      const produtosCarregados = await service.listar();
+      if (produtosCarregados && produtosCarregados.length > 0) {
+        setProdutos(produtosCarregados);
+      } else {
+        setProdutos([]);
+        setErro('Nenhum produto encontrado');
+      }
+    } catch (error) {
+      setProdutos([]);
+      setErro('Erro ao conectar ao servidor. Verifique se a API está rodando.');
+      console.error('Erro:', error);
+    } finally {
+      setCarregando(false);
     }
-
-    await service.remover(produtoSelecionado.id!);
-    setShowModal(false);
-    setProdutoSelecionado(null);
-    carregarProdutos();
-    presentAlert({
-      header: 'Sucesso',
-      message: 'Produto removido com sucesso.',
-      buttons: ['OK'],
-    });
   }
 
-  function abrirModalRemocao(produto: Produto) {
-    setProdutoSelecionado(produto);
-    setShowModal(true);
+  async function removerProdutoDireto(produto: Produto) {
+    setDeletando(true);
+    setErro(null);
+    try {
+      const result = await service.remover(produto.id!);
+      if (result) {
+        setProdutos((current) => current.filter((p) => p.id !== produto.id));
+        presentAlert({
+          header: 'Sucesso',
+          message: 'Produto removido com sucesso.',
+          buttons: ['OK'],
+        });
+      } else {
+        throw new Error('Falha ao remover o produto.');
+      }
+    } catch (error) {
+      setErro('Erro ao remover o produto. Tente novamente.');
+      console.error('Erro ao remover produto:', error);
+    } finally {
+      setDeletando(false);
+    }
+  }
+
+  function confirmarExclusao(produto: Produto) {
+    presentAlert({
+      header: 'Confirmar exclusão',
+      message: `Deseja realmente excluir o produto "${produto.nome}"?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Excluir',
+          handler: () => removerProdutoDireto(produto),
+        },
+      ],
+    });
   }
 
   function navegarParaCadastro() {
@@ -77,6 +110,13 @@ const Home: React.FC = () => {
         <IonButton expand="block" onClick={navegarParaCadastro}>
           Cadastrar Produto
         </IonButton>
+        <IonButton expand="block" color="primary" onClick={carregarProdutos} disabled={carregando}>
+          {carregando ? 'Carregando...' : 'Mostrar Produtos'}
+        </IonButton>
+        
+        {erro && <p style={{ color: 'red', textAlign: 'center', marginTop: '15px' }}>⚠️ {erro}</p>}
+        {produtos.length > 0 && <h3 style={{ marginTop: '20px' }}>Produtos Cadastrados:</h3>}
+        {produtos.length === 0 && !carregando && !erro && <p style={{ textAlign: 'center', color: '#999', marginTop: '20px' }}>Clique em "Mostrar Produtos" para carregar a lista</p>}
         <IonList>
           {produtos.map((produto) => (
             <IonItemSliding key={produto.id ?? produto.nome}>
@@ -85,35 +125,14 @@ const Home: React.FC = () => {
                   <h2>{produto.nome}</h2>
                   <p>R$ {produto.preco.toFixed(2)} | Estoque: {produto.estoque}</p>
                 </IonLabel>
+                <IonButton color="danger" fill="outline" slot="end" onClick={() => confirmarExclusao(produto)} disabled={deletando}>
+                  Excluir
+                </IonButton>
               </IonItem>
-              <IonItemOptions side="end">
-                <IonItemOption color="danger" onClick={() => abrirModalRemocao(produto)}>
-                  <IonIcon slot="icon-only" icon={trashOutline} />
-                </IonItemOption>
-              </IonItemOptions>
             </IonItemSliding>
           ))}
         </IonList>
 
-        <IonModal ref={modal} isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>Confirmar remoção</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <p>Tem certeza que deseja remover o produto abaixo?</p>
-            <p>
-              <strong>{produtoSelecionado?.nome}</strong>
-            </p>
-            <IonButton expand="block" color="danger" onClick={removerProduto}>
-              Remover
-            </IonButton>
-            <IonButton expand="block" fill="outline" onClick={() => setShowModal(false)}>
-              Cancelar
-            </IonButton>
-          </IonContent>
-        </IonModal>
       </IonContent>
     </IonPage>
   );

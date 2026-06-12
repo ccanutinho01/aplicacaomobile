@@ -1,21 +1,34 @@
 [
-    {
-        "id": 1,
-        "nome": "Produto 1",
-        "preco": 10.99,
-        "descricao": "Descrição do Produto 1"   
-        },
-    },
-    {
-        "id": 2,
-        "nome": "Produto 2",
-        "preco": 19.99,
-        "descricao": "Descrição do Produto 2"   
-    },
-    {
-        "id": 3,
-        "nome": "Produto 3",
-        "preco": 5.99,
-        "descricao": "Descrição do Produto 3"   
-    }
-] 
+  {
+    "id": 2,
+    "nome": "Produto 2",
+    "preco": 19.99,
+    "descricao": "Descrição do Produto 2",
+    "estoque": 30
+  },
+  {
+    "id": 3,
+    "nome": "Produto 3",
+    "preco": 5.99,
+    "descricao": "Descrição do Produto 3",
+    "estoque": 100
+  },
+  {
+    "id": 1781207183555,
+    "nome": "arroz",
+    "preco": 25,
+    "estoque": 2
+  },
+  {
+    "id": 1781207670051,
+    "nome": "carro",
+    "preco": 255,
+    "estoque": 2
+  },
+  {
+    "id": 1781208751035,
+    "nome": "arroz carreteiro ",
+    "preco": 25,
+    "estoque": 2
+  }
+]
