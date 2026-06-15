@@ -30,5 +30,17 @@
     "nome": "arroz carreteiro ",
     "preco": 25,
     "estoque": 2
+  },
+  {
+    "id": 1781558358205,
+    "nome": "arroz ",
+    "preco": 12,
+    "estoque": 2
+  },
+  {
+    "id": 1781561946693,
+    "nome": "feijão carlos",
+    "preco": 25,
+    "estoque": 2
   }
 ]
