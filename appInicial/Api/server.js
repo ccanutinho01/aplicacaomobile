@@ -15,6 +15,13 @@ app.get("/produtos", (req, res) => {
     res.json(produtos);
 });
 
+const mysql = {
+    host: "localhost",
+    user: "root",
+    password: " ",
+    database: "controle_produtos"       
+};
+
 app.post("/produtos", (req, res) => {
     const dados = fs.readFileSync(arquivo);
     const produtos = JSON.parse(dados);
@@ -58,3 +65,4 @@ app.delete("/produtos/:id", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
