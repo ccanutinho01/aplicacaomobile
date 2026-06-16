@@ -45,9 +45,10 @@ const Home: React.FC = () => {
         setProdutos([]);
         setErro('Nenhum produto encontrado');
       }
-    } catch (error) {
+    } catch (error: any) {
       setProdutos([]);
-      setErro('Erro ao conectar ao servidor. Verifique se a API está rodando.');
+      const detalhe = error?.message ? ` (${error.message})` : '';
+      setErro(`Erro ao conectar ao servidor. Verifique se a API está rodando.${detalhe}`);
       console.error('Erro:', error);
     } finally {
       setCarregando(false);
@@ -95,6 +96,8 @@ const Home: React.FC = () => {
   }
 
   function navegarParaCadastro() {
+    const activeElement = document.activeElement as HTMLElement | null;
+    activeElement?.blur();
     history.push('/cadastro');
   }
 

@@ -1,31 +1,37 @@
-import mysql from "mysql2";
-import express from "express";
-import cors from "cors";
+import mysql from 'mysql2';
+import express from 'express';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
 const db = mysql.createConnection({
-    host: "localhost",
-    user:   "root",
-    password: "root",
-    database: "controle_estoque"
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'controle_produto'
 });
 
-db.connect(err => {
+const port = 3000;
+
+db.connect((err) => {
     if (err) {
-        console.error("Erro ao conectar ao banco de dados:", err);
-        process.exit(1);
+        console.error('Erro ao conectar ao MySQL:', err);
+        return;
     }
-    console.log("Conectado ao banco de dados MySQL");
+    console.log('Conexão bem-sucedida ao MySQL!');
 });
 
-const PORT = 3000;
+app.get('/produtos', (req, res) => {
+    db.query('SELECT * FROM produtos', (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar produtos:', err);
+            res.status(500).json({ error: 'Erro ao buscar produtos' });
+        } else {
+            res.json(results);
+        }
 
-app.get("/produtos", (req, res) => {
-    db.query("SELECT * FROM produtos", (err, results) => {
-        res.json(results);
     });
 });
 
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
+});

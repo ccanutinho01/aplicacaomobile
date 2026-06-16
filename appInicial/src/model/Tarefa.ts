@@ -13,4 +13,3 @@ export class Tarefa {
         this.concluida = true;
     }
 }
-

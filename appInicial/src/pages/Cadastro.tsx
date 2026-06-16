@@ -30,6 +30,8 @@ const Cadastro: React.FC = () => {
       if (precoRef.current) precoRef.current.value = "";
       if (estoqueRef.current) estoqueRef.current.value = "";
 
+      const activeElement = document.activeElement as HTMLElement | null;
+      activeElement?.blur();
       history.push('/home');
     } else {
       presentAlert({
@@ -41,6 +43,8 @@ const Cadastro: React.FC = () => {
   }
 
   function navegarParaHome(){
+    const activeElement = document.activeElement as HTMLElement | null;
+    activeElement?.blur();
     history.push('/home');
   }
 
