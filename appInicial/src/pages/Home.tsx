@@ -35,70 +35,41 @@ const Home: React.FC = () => {
   });
 
   async function carregarProdutos() {
-    setCarregando(true);
-    setErro(null);
-    try {
-      const produtosCarregados = await service.listar();
-      if (produtosCarregados && produtosCarregados.length > 0) {
-        setProdutos(produtosCarregados);
-      } else {
-        setProdutos([]);
-        setErro('Nenhum produto encontrado');
-      }
-    } catch (error: any) {
-      setProdutos([]);
-      const detalhe = error?.message ? ` (${error.message})` : '';
-      setErro(`Erro ao conectar ao servidor. Verifique se a API está rodando.${detalhe}`);
-      console.error('Erro:', error);
-    } finally {
-      setCarregando(false);
-    }
+   const produtosCarregados = await service.listar();
+    setProdutos(produtosCarregados);
   }
 
-  async function removerProdutoDireto(produto: Produto) {
-    setDeletando(true);
-    setErro(null);
-    try {
-      const result = await service.remover(produto.id!);
-      if (result) {
-        setProdutos((current) => current.filter((p) => p.id !== produto.id));
-        presentAlert({
-          header: 'Sucesso',
-          message: 'Produto removido com sucesso.',
-          buttons: ['OK'],
-        });
-      } else {
-        throw new Error('Falha ao remover o produto.');
-      }
-    } catch (error) {
-      setErro('Erro ao remover o produto. Tente novamente.');
-      console.error('Erro ao remover produto:', error);
-    } finally {
-      setDeletando(false);
-    }
+  async function removerProduto(id: number) {
+    await service.remover(id);
+    carregarProdutos();
+  }
+  function navegarparaCadastro() {
+    history.push('/cadastro');
   }
 
-  function confirmarExclusao(produto: Produto) {
-    presentAlert({
-      header: 'Confirmar exclusão',
-      message: `Deseja realmente excluir o produto "${produto.nome}"?`,
+  const [present] = useIonActionSheet();
+
+  async function deleteProduto(id: number) {
+    present({
+      header: 'Tem certeza que deseja excluir este produto?',
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Excluir',
-          handler: () => removerProdutoDireto(produto),
-        },
+        {text: 'Sim', role: 'confirm',},
+        {text: 'Não', role: 'cancel',}
       ],
+      onwillDismiss: (event) => {
+        if (event.detail.role === 'confirm') {
+          removerProduto(id);
+        }
+      }
     });
   }
+ async function editarProduto(id: number) {
+    history.push(`/editar/${id}`);
+  }
 
-  function navegarParaCadastro() {
-    const activeElement = document.activeElement as HTMLElement | null;
-    activeElement?.blur();
-    history.push('/cadastro');
+
+  function confirmarExclusao(produto: Produto): void {
+    throw new Error('Function not implemented.');
   }
 
   return (
@@ -110,7 +81,7 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <h2>Bem-vindo ao Controle de Estoque</h2>
-        <IonButton expand="block" onClick={navegarParaCadastro}>
+        <IonButton expand="block" onClick={navegarparaCadastro}>
           Cadastrar Produto
         </IonButton>
         <IonButton expand="block" color="primary" onClick={carregarProdutos} disabled={carregando}>
@@ -128,7 +99,7 @@ const Home: React.FC = () => {
                   <h2>{produto.nome}</h2>
                   <p>R$ {produto.preco.toFixed(2)} | Estoque: {produto.estoque}</p>
                 </IonLabel>
-                <IonButton color="danger" fill="outline" slot="end" onClick={() => confirmarExclusao(produto)} disabled={deletando}>
+                <IonButton color="danger" fill="outline" slot="end" onClick={() => deleteProduto(produto.id)} disabled={deletando}>
                   Excluir
                 </IonButton>
               </IonItem>
