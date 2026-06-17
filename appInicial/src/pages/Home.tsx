@@ -15,6 +15,7 @@ import {
   IonItemOption,
   IonItemOptions,
   useIonAlert,
+  useIonActionSheet,
 } from '@ionic/react';
 import { useHistory } from 'react-router';
 import { trashOutline } from 'ionicons/icons';
@@ -67,11 +68,6 @@ const Home: React.FC = () => {
     history.push(`/editar/${id}`);
   }
 
-
-  function confirmarExclusao(produto: Produto): void {
-    throw new Error('Function not implemented.');
-  }
-
   return (
     <IonPage>
       <IonHeader>
@@ -99,7 +95,7 @@ const Home: React.FC = () => {
                   <h2>{produto.nome}</h2>
                   <p>R$ {produto.preco.toFixed(2)} | Estoque: {produto.estoque}</p>
                 </IonLabel>
-                <IonButton color="danger" fill="outline" slot="end" onClick={() => deleteProduto(produto.id)} disabled={deletando}>
+                <IonButton color="danger" fill="outline" slot="end" onClick={() => deleteProduto(produto.id!)} disabled={deletando}>
                   Excluir
                 </IonButton>
               </IonItem>
