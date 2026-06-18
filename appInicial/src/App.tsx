@@ -3,6 +3,7 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import Cadastro from './pages/Cadastro';
+import Editar from './pages/Editar';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,6 +46,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/cadastro">
           <Cadastro />
+        </Route>
+        <Route exact path="/editar/:id">
+          <Editar />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />

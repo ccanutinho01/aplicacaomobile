@@ -36,35 +36,45 @@ const Home: React.FC = () => {
   });
 
   async function carregarProdutos() {
-   const produtosCarregados = await service.listar();
+    const produtosCarregados = await service.listar();
     setProdutos(produtosCarregados);
   }
 
   async function removerProduto(id: number) {
-    await service.remover(id);
-    carregarProdutos();
+    setDeletando(true);
+    setErro(null);
+
+    try {
+      await service.remover(id);
+      await carregarProdutos();
+    } catch (err) {
+      setErro('Falha ao excluir o produto. Tente novamente.');
+    } finally {
+      setDeletando(false);
+    }
   }
+
   function navegarparaCadastro() {
     history.push('/cadastro');
   }
 
-  const [present] = useIonActionSheet();
-
   async function deleteProduto(id: number) {
-    present({
+    presentAlert({
       header: 'Tem certeza que deseja excluir este produto?',
       buttons: [
-        {text: 'Sim', role: 'confirm',},
-        {text: 'Não', role: 'cancel',}
+        {
+          text: 'Não',
+          role: 'cancel',
+        },
+        {
+          text: 'Sim',
+          handler: () => removerProduto(id),
+        },
       ],
-      onwillDismiss: (event) => {
-        if (event.detail.role === 'confirm') {
-          removerProduto(id);
-        }
-      }
     });
   }
- async function editarProduto(id: number) {
+
+  async function editarProduto(id: number) {
     history.push(`/editar/${id}`);
   }
 
@@ -95,6 +105,9 @@ const Home: React.FC = () => {
                   <h2>{produto.nome}</h2>
                   <p>R$ {produto.preco.toFixed(2)} | Estoque: {produto.estoque}</p>
                 </IonLabel>
+                <IonButton color="tertiary" fill="outline" slot="end" onClick={() => editarProduto(produto.id!)} style={{ marginRight: 8 }}>
+                  Editar
+                </IonButton>
                 <IonButton color="danger" fill="outline" slot="end" onClick={() => deleteProduto(produto.id!)} disabled={deletando}>
                   Excluir
                 </IonButton>

@@ -12,6 +12,19 @@ export class ProdutoService {
       return res.json();
   }
 
+  async buscar(id: number) {
+    try {
+      const res = await fetch(`${this.baseUrl}/produtos/${id}`);
+      if (!res.ok) {
+        throw new Error(`Erro na requisição: ${res.status}`);
+      }
+      return await res.json();
+    } catch (error) {
+      console.error('Erro ao buscar produto:', error);
+      return null;
+    }
+  }
+
   async adicionar(produto: any) {
     try {
       const res = await fetch(`${this.baseUrl}/produtos`, {
