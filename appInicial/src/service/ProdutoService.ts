@@ -4,6 +4,14 @@ import { Produto } from '../model/Produto';
 export class ProdutoService {
   baseUrl = 'http://localhost:3000';
 
+  async buscarCep(cep: string) {
+    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    if (!res.ok) {
+      throw new Error(`Erro na requisição: ${res.status}`);
+    }
+    return res.json();
+  }
+  
   async listar() {
       const res = await fetch(`${this.baseUrl}/produtos`);
       if (!res.ok) {
